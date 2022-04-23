@@ -4,7 +4,7 @@ import com.lzl.spring.*;
 
 @Component("userService")
 @Scope("prototype")
-public class UserService implements BeanNameAware, InitializingBean {
+public class UserService implements BeanNameAware, InitializingBean,UserInterface {
     @Autowired
     private OrderService orderService;
 
@@ -18,6 +18,7 @@ public class UserService implements BeanNameAware, InitializingBean {
         System.out.println("UserService.afterPropertiesSet() -- execute!!!!");
     }
 
+    @Override
     public void test(){
         System.out.println(orderService);
     }

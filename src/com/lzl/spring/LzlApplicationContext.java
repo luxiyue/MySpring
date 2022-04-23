@@ -5,12 +5,14 @@ import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LzlApplicationContext {
     private Class configClass;
     private ConcurrentHashMap<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<>();
     private ConcurrentHashMap<String, Object> singletonObjects = new ConcurrentHashMap<>();
+    private ArrayList<BeanPostProcessor> beanPostProcessorList = new ArrayList<>();
 
     public LzlApplicationContext(Class configClass) {
         this.configClass = configClass;
@@ -33,6 +35,10 @@ public class LzlApplicationContext {
                         try {
                             Class<?> clazz = classLoader.loadClass(className);
                             if (clazz.isAnnotationPresent(Component.class)) {//是个Bean
+                                if (BeanPostProcessor.class.isAssignableFrom(clazz)) {
+                                    BeanPostProcessor beanPostProcessor = (BeanPostProcessor) clazz.newInstance();
+                                    beanPostProcessorList.add(beanPostProcessor);
+                                }
                                 Component componet = clazz.getAnnotation(Component.class);
                                 String beanName = componet.value();//bean的名字
                                 if (beanName.equals("")) {
@@ -49,6 +55,10 @@ public class LzlApplicationContext {
                                 beanDefinitionMap.put(beanName,beanDefinition);
                             }
                         }catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        } catch (InstantiationException e) {
+                            e.printStackTrace();
+                        } catch (IllegalAccessException e) {
                             e.printStackTrace();
                         }
                     }
@@ -82,9 +92,19 @@ public class LzlApplicationContext {
             if (instance instanceof BeanNameAware) {
                 ((BeanNameAware)instance).setBeanName(beanName);
             }
-            //初始化
+            //beanPostProcessor-Before
+            for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
+                instance = beanPostProcessor.postProcessBeforeInitialization(beanName,instance);
+            }
+
+            //invokeInitMethods:初始化
             if (instance instanceof InitializingBean) {
                 ((InitializingBean)instance).afterPropertiesSet();
+            }
+
+            //beanPostProcessor-After
+            for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
+                instance = beanPostProcessor.postProcessAfterInitialization(beanName,instance);
             }
 
             return instance;
