@@ -14,6 +14,12 @@ public class LzlApplicationContext {
     private ConcurrentHashMap<String, Object> singletonObjects = new ConcurrentHashMap<>();
     private ArrayList<BeanPostProcessor> beanPostProcessorList = new ArrayList<>();
 
+    /**
+     * ①设置configClass
+     * ②扫描@ComponentScan指定的目录 ，生成  BeanDefinition，并顺便将实现了BeanPostProcessor的bean放入beanPostProcessorList中去
+     * ③将标有@Scope注解的且value为“singleton”的bean实例化放入 singletonObjects中去
+     * @param configClass
+     */
     public LzlApplicationContext(Class configClass) {
         this.configClass = configClass;
         //扫描  ---》 BeanDefinition --- > beanDefinitionMap
@@ -77,6 +83,14 @@ public class LzlApplicationContext {
     }
 
 
+    /**
+     * ①createBeanInstance
+     * ②populateBean
+     * ③ invokeAwareMethods  ->  postProceesor:Before  -> initMethods --> postProcessor:After
+     * @param beanName
+     * @param beanDefinition
+     * @return
+     */
     private Object createBean(String beanName,BeanDefinition beanDefinition){
         Class clazz = beanDefinition.getType();
         try {
@@ -122,6 +136,12 @@ public class LzlApplicationContext {
     }
 
 
+    /**
+     * 如果是Singleton则从容器中获取，
+     * 如果是ProtoType则直接new生成。
+     * @param beanName
+     * @return
+     */
     public Object getBean(String beanName) {
         BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
         if (beanDefinition == null) {
