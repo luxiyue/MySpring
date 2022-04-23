@@ -7,5 +7,6 @@ public class Test {
         LzlApplicationContext applicationContext = new LzlApplicationContext(AppConfig.class);
         UserService userService = (UserService) applicationContext.getBean("userService");
         userService.test();
+        System.out.println(userService.getXxx());
     }
 }

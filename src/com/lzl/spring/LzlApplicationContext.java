@@ -71,13 +71,22 @@ public class LzlApplicationContext {
         Class clazz = beanDefinition.getType();
         try {
             Object instance = clazz.getConstructor().newInstance();
-            //简单版依赖注入
+            //populateBean:简单版依赖注入
             for (Field f : clazz.getDeclaredFields()) {
                 if (f.isAnnotationPresent(Autowired.class)) {
                     f.setAccessible(true);
                     f.set(instance,getBean(f.getName()));
                 }
             }
+            //invokeAwareMethods:Aware回调
+            if (instance instanceof BeanNameAware) {
+                ((BeanNameAware)instance).setBeanName(beanName);
+            }
+            //初始化
+            if (instance instanceof InitializingBean) {
+                ((InitializingBean)instance).afterPropertiesSet();
+            }
+
             return instance;
         } catch (InstantiationException e) {
             e.printStackTrace();
