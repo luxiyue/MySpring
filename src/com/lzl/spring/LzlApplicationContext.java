@@ -37,7 +37,7 @@ public class LzlApplicationContext {
                     String fileName = f.getAbsolutePath();//绝对路径:E:\JavaCode\MySpring\out\production\MySpring\com\lzl\service\UserService.class
                     if (fileName.endsWith(".class")){
                         String className = fileName.substring(fileName.indexOf("com"), fileName.indexOf(".class"));
-                        className = className.replace("\\",".");//com.lzl.service.UserService
+                        className = className.replace("\\",".").replace("/",".");//com.lzl.service.UserService
                         try {
                             Class<?> clazz = classLoader.loadClass(className);
                             if (clazz.isAnnotationPresent(Component.class)) {//是个Bean
@@ -74,11 +74,12 @@ public class LzlApplicationContext {
 
         //实例化单例Bean
         for (String beanName : beanDefinitionMap.keySet()) {
-            BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
-            if (beanDefinition.getScope().equals("singleton")) {
-                Object bean = createBean(beanName,beanDefinition);
-                singletonObjects.put(beanName,bean);
-            }
+//            BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
+//            if (beanDefinition.getScope().equals("singleton")) {
+//                Object bean = createBean(beanName,beanDefinition);
+//                singletonObjects.put(beanName,bean);
+//            }
+            getBean(beanName);
         }
     }
 
