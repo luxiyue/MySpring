@@ -1,11 +1,7 @@
-package com.lzl.service;
+package com.lzl.userapp.config;
 
 import com.lzl.spring.BeanPostProcessor;
 import com.lzl.spring.Component;
-
-import java.lang.reflect.InvocationHandler;
-import java.lang.reflect.Method;
-import java.lang.reflect.Proxy;
 
 @Component
 public class LuzelongBeanPostProcessor implements BeanPostProcessor {

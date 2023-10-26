@@ -1,10 +1,11 @@
-package com.lzl.service;
+package com.lzl.userapp.service.impl;
 
 import com.lzl.spring.*;
+import com.lzl.userapp.service.UserInterface;
 
 @Component("userService")
 @Scope("prototype")
-public class UserService implements BeanNameAware, InitializingBean,UserInterface {
+public class UserService implements BeanNameAware, InitializingBean, UserInterface {
     @Autowired
     private OrderService orderService;
 

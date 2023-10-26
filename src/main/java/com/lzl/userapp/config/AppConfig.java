@@ -1,7 +1,7 @@
-package com.lzl.service;
+package com.lzl.userapp.config;
 
 import com.lzl.spring.ComponentScan;
 
-@ComponentScan("com.lzl.service")
+@ComponentScan("com.lzl.userapp")
 public class AppConfig {
 }

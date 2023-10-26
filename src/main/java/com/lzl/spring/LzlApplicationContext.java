@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LzlApplicationContext {
@@ -32,7 +33,8 @@ public class LzlApplicationContext {
             URL resource = classLoader.getResource(path);
             File file = new File(resource.getFile());//E:\JavaCode\MySpring\out\production\MySpring\com\lzl\service
             if (file.isDirectory()) {//如果是文件夹
-                File[] files = file.listFiles();
+                //找到该文件夹下的所有普通file
+                List<File> files = getFilesOfDirectory(file);
                 for (File f : files) {
                     String fileName = f.getAbsolutePath();//绝对路径:E:\JavaCode\MySpring\out\production\MySpring\com\lzl\service\UserService.class
                     if (fileName.endsWith(".class")){
@@ -81,6 +83,29 @@ public class LzlApplicationContext {
 //            }
             getBean(beanName);
         }
+    }
+
+
+    /**
+     * 找到该文件夹下的所有普通file
+     * @param directory
+     * @return
+     */
+    private List<File> getFilesOfDirectory(File directory) {
+        List<File> result = new ArrayList<>();
+        File[] files = directory.listFiles();
+        if (files == null || files.length == 0) {
+            return result;
+        }
+        for (File file : files) {
+            if (file.isFile()) {
+                result.add(file);
+            }
+            if (file.isDirectory()){
+                result.addAll(getFilesOfDirectory(file));
+            }
+        }
+        return result;
     }
 
 

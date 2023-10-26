@@ -1,4 +1,4 @@
-package com.lzl.service;
+package com.lzl.userapp.service.impl;
 
 import com.lzl.spring.Component;
 
