@@ -43,10 +43,6 @@ public class LzlApplicationContext {
                         try {
                             Class<?> clazz = classLoader.loadClass(className);
                             if (clazz.isAnnotationPresent(Component.class)) {//是个Bean
-                                if (BeanPostProcessor.class.isAssignableFrom(clazz)) {
-                                    BeanPostProcessor beanPostProcessor = (BeanPostProcessor) clazz.newInstance();
-                                    beanPostProcessorList.add(beanPostProcessor);
-                                }
                                 Component componet = clazz.getAnnotation(Component.class);
                                 String beanName = componet.value();//bean的名字
                                 if (beanName.equals("")) {
@@ -64,9 +60,7 @@ public class LzlApplicationContext {
                             }
                         }catch (ClassNotFoundException e) {
                             e.printStackTrace();
-                        } catch (InstantiationException e) {
-                            e.printStackTrace();
-                        } catch (IllegalAccessException e) {
+                        }catch (Exception e){
                             e.printStackTrace();
                         }
                     }
@@ -74,15 +68,25 @@ public class LzlApplicationContext {
             }
         }
 
+        //简单实现：注册bean的后置处理器
+        registerBeanPostProcessors();
+
+
         //实例化单例Bean
         for (String beanName : beanDefinitionMap.keySet()) {
-//            BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
-//            if (beanDefinition.getScope().equals("singleton")) {
-//                Object bean = createBean(beanName,beanDefinition);
-//                singletonObjects.put(beanName,bean);
-//            }
             getBean(beanName);
         }
+    }
+
+
+
+    private void registerBeanPostProcessors() {
+        beanDefinitionMap.values().forEach(beanDefinition -> {
+            if (BeanPostProcessor.class.isAssignableFrom(beanDefinition.getType())) {
+                BeanPostProcessor beanPostProcessor = (BeanPostProcessor) getBean(beanDefinition.getType());
+                beanPostProcessorList.add(beanPostProcessor);
+            }
+        });
     }
 
 
@@ -177,14 +181,28 @@ public class LzlApplicationContext {
             if (scope.equals("singleton")) {
                 Object bean = singletonObjects.get(beanName);
                 if (bean == null) {
-                    Object o = createBean(beanName, beanDefinition);
-                    singletonObjects.put(beanName,o);
+                    bean = createBean(beanName, beanDefinition);
+                    singletonObjects.put(beanName,bean);
                 }
                 return bean;
             }else {//多例
                 return createBean(beanName,beanDefinition);
             }
         }
+    }
+
+
+    public <T> T getBean(Class<T> clazz){
+        // 1.推断该类的对应的beanName
+        String beanName = null;
+        if (clazz.isAnnotationPresent(Component.class)) {//是个Bean
+            Component componet = clazz.getAnnotation(Component.class);
+            beanName = componet.value();//bean的名字
+            if (beanName.equals("")) {
+                beanName = Introspector.decapitalize(clazz.getSimpleName());
+            }
+        }
+        return (T) getBean(beanName);
     }
 
 }
