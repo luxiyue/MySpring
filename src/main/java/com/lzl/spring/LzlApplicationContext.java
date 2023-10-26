@@ -33,6 +33,7 @@ public class LzlApplicationContext {
         obtainFreshBeanFactory();
         //简单实现：注册bean的后置处理器
         registerBeanPostProcessors();
+        onRefresh();
         finishBeanFactoryInitialization();
     }
 
@@ -43,6 +44,12 @@ public class LzlApplicationContext {
         for (String beanName : beanDefinitionMap.keySet()) {
             getBean(beanName);
         }
+    }
+
+
+
+
+    private void onRefresh(){
     }
 
 
