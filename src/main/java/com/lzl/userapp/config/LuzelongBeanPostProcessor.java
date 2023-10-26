@@ -1,7 +1,7 @@
 package com.lzl.userapp.config;
 
 import com.lzl.spring.BeanPostProcessor;
-import com.lzl.spring.Component;
+import com.lzl.spring.annotations.Component;
 
 @Component
 public class LuzelongBeanPostProcessor implements BeanPostProcessor {

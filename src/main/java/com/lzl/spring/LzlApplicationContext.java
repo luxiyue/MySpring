@@ -1,5 +1,10 @@
 package com.lzl.spring;
 
+import com.lzl.spring.annotations.Autowired;
+import com.lzl.spring.annotations.Component;
+import com.lzl.spring.annotations.ComponentScan;
+import com.lzl.spring.annotations.Scope;
+
 import java.beans.Introspector;
 import java.io.File;
 import java.lang.reflect.Field;

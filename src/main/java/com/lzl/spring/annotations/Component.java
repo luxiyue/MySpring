@@ -1,4 +1,4 @@
-package com.lzl.spring;
+package com.lzl.spring.annotations;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

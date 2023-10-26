@@ -1,6 +1,9 @@
 package com.lzl.userapp.service.impl;
 
 import com.lzl.spring.*;
+import com.lzl.spring.annotations.Autowired;
+import com.lzl.spring.annotations.Component;
+import com.lzl.spring.annotations.Scope;
 import com.lzl.userapp.service.UserInterface;
 
 @Component("userService")
