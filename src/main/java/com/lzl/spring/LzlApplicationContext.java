@@ -23,7 +23,30 @@ public class LzlApplicationContext {
      */
     public LzlApplicationContext(Class configClass) {
         this.configClass = configClass;
+        refresh();
+    }
+
+
+
+    private void refresh() {
         //扫描  ---》 BeanDefinition --- > beanDefinitionMap
+        obtainFreshBeanFactory();
+        //简单实现：注册bean的后置处理器
+        registerBeanPostProcessors();
+        finishBeanFactoryInitialization();
+    }
+
+
+
+    private void finishBeanFactoryInitialization() {
+        //实例化单例Bean
+        for (String beanName : beanDefinitionMap.keySet()) {
+            getBean(beanName);
+        }
+    }
+
+
+    private void obtainFreshBeanFactory() {
         if (configClass.isAnnotationPresent(ComponentScan.class)) {
             ComponentScan componentScanAnnotation = (ComponentScan) configClass.getAnnotation(ComponentScan.class);
             String path = componentScanAnnotation.value();//扫描路径 （com.lzl.service）
@@ -67,17 +90,7 @@ public class LzlApplicationContext {
                 }
             }
         }
-
-        //简单实现：注册bean的后置处理器
-        registerBeanPostProcessors();
-
-
-        //实例化单例Bean
-        for (String beanName : beanDefinitionMap.keySet()) {
-            getBean(beanName);
-        }
     }
-
 
 
     private void registerBeanPostProcessors() {
