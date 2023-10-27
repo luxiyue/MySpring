@@ -12,11 +12,11 @@ import java.io.IOException;
  */
 public class DispatcherServlet extends HttpServlet {
 
-
     @Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        System.out.println("111111");
         //核心逻辑
+        resp.getWriter().write("hello luzelong!!!!");
     }
-
 
 }

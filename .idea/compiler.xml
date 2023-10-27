@@ -15,7 +15,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="MySpring" options="-parameters" />
+      <module name="MySpring" options="" />
     </option>
   </component>
 </project>

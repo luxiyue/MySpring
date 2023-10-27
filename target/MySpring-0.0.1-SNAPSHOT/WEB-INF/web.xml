@@ -4,8 +4,6 @@
          xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd"
          version="4.0">
 
-
-
     <servlet>
         <servlet-name>dispatcherServlet</servlet-name>
         <servlet-class>com.lzl.springmvc.DispatcherServlet</servlet-class>
@@ -13,7 +11,7 @@
             <param-name>configClass</param-name>
             <param-value>com.lzl.userapp.config.AppConfig</param-value> <!-- spring的子容器 -->
         </init-param>
-        <load-on-startup>1</load-on-startup>
+<!--        <load-on-startup>1</load-on-startup>-->
     </servlet>
 
 
