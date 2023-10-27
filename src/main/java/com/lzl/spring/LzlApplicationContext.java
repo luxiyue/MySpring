@@ -79,7 +79,7 @@ public class LzlApplicationContext {
                         className = className.replace("\\",".").replace("/",".");//com.lzl.service.UserService
                         try {
                             Class<?> clazz = classLoader.loadClass(className);
-                            if (clazz.isAnnotationPresent(Component.class)) {//是个Bean
+                            if (clazz.isAnnotationPresent(Component.class) && !clazz.isInterface()) {//是个Bean
                                 Component componet = clazz.getAnnotation(Component.class);
                                 String beanName = componet.value();//bean的名字
                                 if (beanName.equals("")) {
