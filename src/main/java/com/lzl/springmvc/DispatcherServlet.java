@@ -84,6 +84,8 @@ public class DispatcherServlet extends HttpServlet {
             LzlApplicationContext context = new LzlApplicationContext(AppConfig.class);
             Map<String, HandlerMapping> handlerMappingMap = context.getBeansOfType(HandlerMapping.class);
             handlerMappings.addAll(handlerMappingMap.values());
+            Map<String, HandlerAdapter> handlerAdapterMap = context.getBeansOfType(HandlerAdapter.class);
+            handlerAdapters.addAll(handlerAdapterMap.values());
         }catch (Exception e){
             e.printStackTrace();
         }
