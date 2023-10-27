@@ -54,7 +54,7 @@ public class LzlApplicationContext {
 
 
 
-    private void onRefresh(){
+    protected void onRefresh(){
     }
 
 
@@ -93,9 +93,7 @@ public class LzlApplicationContext {
                                 }
                                 beanDefinitionMap.put(beanName,beanDefinition);
                             }
-                        }catch (ClassNotFoundException e) {
-                            e.printStackTrace();
-                        }catch (Exception e){
+                        } catch (Exception e){
                             e.printStackTrace();
                         }
                     }
@@ -156,13 +154,7 @@ public class LzlApplicationContext {
             populateBean(clazz, instance);
             Object exposedObject = initializeBean(beanName, instance);
             return exposedObject;
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
