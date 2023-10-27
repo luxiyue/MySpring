@@ -4,9 +4,11 @@ import com.lzl.spring.annotations.Autowired;
 import com.lzl.spring.annotations.Component;
 import com.lzl.spring.annotations.ComponentScan;
 import com.lzl.spring.annotations.Scope;
+import com.lzl.springmvc.annotations.Controller;
 
 import java.beans.Introspector;
 import java.io.File;
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
@@ -79,10 +81,9 @@ public class LzlApplicationContext {
                         className = className.replace("\\",".").replace("/",".");//com.lzl.service.UserService
                         try {
                             Class<?> clazz = classLoader.loadClass(className);
-                            if (clazz.isAnnotationPresent(Component.class) && !clazz.isInterface() && !clazz.isEnum()) {//是个Bean
-                                Component componet = clazz.getAnnotation(Component.class);
-                                String beanName = componet.value();//bean的名字
-                                if (beanName.equals("")) {
+                            if (!clazz.isInterface() && !clazz.isEnum() && isAnnotated(clazz,Component.class) ) {//是个Bean
+                                String beanName = getBeanName(clazz);
+                                if (beanName==null || beanName.equals("")) {
                                     beanName = Introspector.decapitalize(clazz.getSimpleName());
                                 }
                                 BeanDefinition beanDefinition = new BeanDefinition();
@@ -103,6 +104,7 @@ public class LzlApplicationContext {
             }
         }
     }
+
 
 
     private void registerBeanPostProcessors() {
@@ -233,10 +235,9 @@ public class LzlApplicationContext {
     public <T> T getBean(Class<T> clazz){
         // 1.推断该类的对应的beanName
         String beanName = null;
-        if (clazz.isAnnotationPresent(Component.class)) {//是个Bean
-            Component componet = clazz.getAnnotation(Component.class);
-            beanName = componet.value();//bean的名字
-            if (beanName.equals("")) {
+        if (isAnnotated(clazz,Component.class)) {//是个Bean
+            beanName = this.getBeanName(clazz);
+            if (beanName==null || beanName.equals("")) {
                 beanName = Introspector.decapitalize(clazz.getSimpleName());
             }
         }
@@ -257,6 +258,43 @@ public class LzlApplicationContext {
     }
 
 
+    public boolean isAnnotated(Class clazz, Class annotationClazz) {
+        if (clazz.isAnnotationPresent(annotationClazz)) {
+            return true;
+        }
+        Annotation[] annotations = clazz.getAnnotations();
+        if (annotations != null && annotations.length != 0) {
+            for (Annotation annotation : annotations) {
+                if (annotation.annotationType().isAnnotationPresent(annotationClazz)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
+
+////////////////////下面纯属自己乱写的
+    private String getBeanName(Class<?> clazz){
+        try {
+            if (clazz.isAnnotationPresent(Component.class)) {
+                Component componet = clazz.getAnnotation(Component.class);
+                String beanName = componet.value();//bean的名字
+                return beanName;
+            }
+            Annotation[] annotations = clazz.getAnnotations();
+            if (annotations != null && annotations.length != 0) {
+                for (Annotation annotation : annotations) {
+                    if (annotation.annotationType().isAnnotationPresent(Component.class)) {
+                        Controller controller = (Controller) annotation;
+                        return controller.value();
+                    }
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 }

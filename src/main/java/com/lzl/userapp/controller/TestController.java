@@ -8,7 +8,7 @@ import com.lzl.springmvc.annotations.RequestParam;
  * @Author： Luzelong
  * @Created： 2023/10/26 20:05
  */
-@Controller
+@Controller("testController")
 public class TestController {
 
     @RequestMapping("/test")
