@@ -1,8 +1,7 @@
 package com.lzl.springmvc;
 
 import com.lzl.spring.LzlApplicationContext;
-import com.lzl.springmvc.handlerAdapters.RequestMappingHandlerAdapter;
-import com.lzl.springmvc.handlerMappings.RequestMappingHandlerMapping;
+import com.lzl.userapp.config.AppConfig;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -10,10 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.Map;
 
 /**
  * @Author： Luzelong
@@ -83,7 +80,9 @@ public class DispatcherServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         try {
-            LzlApplicationContext applicationContext = new LzlApplicationContext(Class.forName(config.getInitParameter(configClass)));
+            LzlApplicationContext context = new LzlApplicationContext(AppConfig.class);
+            Map<String, HandlerMapping> handlerMappingMap = context.getBeansOfType(HandlerMapping.class);
+            handlerMappings.addAll(handlerMappingMap.values());
         }catch (Exception e){
             e.printStackTrace();
         }

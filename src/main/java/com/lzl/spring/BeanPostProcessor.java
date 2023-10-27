@@ -2,7 +2,12 @@ package com.lzl.spring;
 
 public interface BeanPostProcessor {
 
-    public Object postProcessBeforeInitialization(String beanName,Object bean);
+    default Object postProcessBeforeInitialization(String beanName,Object bean){
+        return bean;
+    }
 
-    public Object postProcessAfterInitialization(String beanName,Object bean);
+    default Object postProcessAfterInitialization(String beanName,Object bean){
+        return bean;
+    }
+
 }

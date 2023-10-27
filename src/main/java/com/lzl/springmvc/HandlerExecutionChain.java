@@ -10,4 +10,8 @@ public class HandlerExecutionChain {
     public Object getHandler() {
         return handler;
     }
+
+    public void setHandler(Object handler) {
+        this.handler = handler;
+    }
 }

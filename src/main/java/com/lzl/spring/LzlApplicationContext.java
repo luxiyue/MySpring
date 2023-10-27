@@ -11,7 +11,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class LzlApplicationContext {
@@ -240,5 +242,21 @@ public class LzlApplicationContext {
         }
         return (T) getBean(beanName);
     }
+
+
+
+
+    public <T> Map<String, T> getBeansOfType(Class<T> clazz) {
+        Map<String, T> result = new HashMap<>();
+        singletonObjects.entrySet().forEach(entry -> {
+            if (clazz.isAssignableFrom(entry.getValue().getClass()) ) {
+                result.put(entry.getKey(), (T)entry.getValue());
+            }
+        });
+        return result;
+    }
+
+
+
 
 }
