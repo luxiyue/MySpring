@@ -11,7 +11,6 @@
             <param-name>configClass</param-name>
             <param-value>com.lzl.userapp.config.AppConfig</param-value> <!-- spring的子容器 -->
         </init-param>
-<!--        <load-on-startup>1</load-on-startup>-->
     </servlet>
 
 

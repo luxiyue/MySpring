@@ -14,7 +14,7 @@ public interface HandlerMapping {
      * @return
      * @throws Exception
      */
-    Object getHandler(HttpServletRequest request) throws Exception;
+    HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception;
 
     
 }
