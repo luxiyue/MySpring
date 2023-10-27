@@ -20,7 +20,7 @@ public class TestController {
     }
 
     @RequestMapping("/test2")
-    public String test02(@RequestParam("list")List<Integer> list){
+    public String test02(@RequestParam("list") List<Integer> list){
         return "TestController.test02~" + list.size() + " " + JSON.toJSONString(list);
     }
 
