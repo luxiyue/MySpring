@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -18,8 +19,8 @@ import java.util.Map;
  */
 public class DispatcherServlet extends HttpServlet {
 
-    private static List<HandlerMapping> handlerMappings;
-    private static List<HandlerAdapter> handlerAdapters;
+    private static List<HandlerMapping> handlerMappings = new ArrayList<>();
+    private static List<HandlerAdapter> handlerAdapters = new ArrayList<>();
     private String configClass;
 
 
