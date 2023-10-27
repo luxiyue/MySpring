@@ -147,36 +147,15 @@ public class LzlApplicationContext {
      * @return
      */
     private Object createBean(String beanName,BeanDefinition beanDefinition){
+        return doCreateBean(beanName, beanDefinition);
+    }
+    private Object doCreateBean(String beanName, BeanDefinition beanDefinition) {
         Class clazz = beanDefinition.getType();
         try {
-            Object instance = clazz.getConstructor().newInstance();
-            //populateBean:简单版依赖注入
-            for (Field f : clazz.getDeclaredFields()) {
-                if (f.isAnnotationPresent(Autowired.class)) {
-                    f.setAccessible(true);
-                    f.set(instance,getBean(f.getName()));
-                }
-            }
-            //invokeAwareMethods:Aware回调
-            if (instance instanceof BeanNameAware) {
-                ((BeanNameAware)instance).setBeanName(beanName);
-            }
-            //beanPostProcessor-Before
-            for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
-                instance = beanPostProcessor.postProcessBeforeInitialization(beanName,instance);
-            }
-
-            //invokeInitMethods:初始化
-            if (instance instanceof InitializingBean) {
-                ((InitializingBean)instance).afterPropertiesSet();
-            }
-
-            //beanPostProcessor-After
-            for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
-                instance = beanPostProcessor.postProcessAfterInitialization(beanName,instance);
-            }
-
-            return instance;
+            Object instance = createBeanInstance(clazz);
+            populateBean(clazz, instance);
+            Object exposedObject = initializeBean(beanName, instance);
+            return exposedObject;
         } catch (InstantiationException e) {
             e.printStackTrace();
         } catch (IllegalAccessException e) {
@@ -186,8 +165,45 @@ public class LzlApplicationContext {
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
-
         return null;
+    }
+
+
+    private Object initializeBean(String beanName, Object bean) {
+        //invokeAwareMethods:Aware回调
+        if (bean instanceof BeanNameAware) {
+            ((BeanNameAware) bean).setBeanName(beanName);
+        }
+        //beanPostProcessor-Before
+        for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
+            bean = beanPostProcessor.postProcessBeforeInitialization(beanName, bean);
+        }
+
+        //invokeInitMethods:初始化
+        if (bean instanceof InitializingBean) {
+            ((InitializingBean) bean).afterPropertiesSet();
+        }
+
+        //beanPostProcessor-After
+        for (BeanPostProcessor beanPostProcessor : beanPostProcessorList) {
+            bean = beanPostProcessor.postProcessAfterInitialization(beanName, bean);
+        }
+
+        return bean;
+    }
+
+    private Object createBeanInstance(Class clazz) throws InstantiationException, IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+        Object instance = clazz.getConstructor().newInstance();
+        return instance;
+    }
+
+    private void populateBean(Class clazz, Object instance) throws IllegalAccessException {
+        for (Field f : clazz.getDeclaredFields()) {
+            if (f.isAnnotationPresent(Autowired.class)) {
+                f.setAccessible(true);
+                f.set(instance,getBean(f.getName()));
+            }
+        }
     }
 
 
@@ -198,6 +214,9 @@ public class LzlApplicationContext {
      * @return
      */
     public Object getBean(String beanName) {
+        return doGetBean(beanName);
+    }
+    private Object doGetBean(String beanName) {
         BeanDefinition beanDefinition = beanDefinitionMap.get(beanName);
         if (beanDefinition == null) {
             throw new NullPointerException();
