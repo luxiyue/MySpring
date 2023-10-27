@@ -1,5 +1,6 @@
 package com.lzl.springmvc.handlerAdapters;
 
+import com.alibaba.fastjson.JSON;
 import com.lzl.spring.annotations.Component;
 import com.lzl.springmvc.HandlerAdapter;
 import com.lzl.springmvc.RequestMappingInfo;
@@ -40,7 +41,7 @@ public class RequestMappingHandlerAdapter implements HandlerAdapter {
         }
 
         Object invoke = method.invoke(info.getObj(), paramValues);
-        response.getWriter().write(invoke.toString());
+        response.getWriter().write(JSON.toJSONString(invoke));
         return null;
     }
 
