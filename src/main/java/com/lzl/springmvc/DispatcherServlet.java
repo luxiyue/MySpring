@@ -21,7 +21,7 @@ public class DispatcherServlet extends HttpServlet {
 
     private static List<HandlerMapping> handlerMappings = new ArrayList<>();
     private static List<HandlerAdapter> handlerAdapters = new ArrayList<>();
-    private String configClass;
+    public static final String CONTEXT_CLASS_PARAM = "contextClass";
 
 
 
@@ -81,7 +81,7 @@ public class DispatcherServlet extends HttpServlet {
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
         try {
-            LzlApplicationContext context = new LzlApplicationContext(AppConfig.class);
+            LzlApplicationContext context = new LzlApplicationContext(Class.forName(config.getInitParameter(CONTEXT_CLASS_PARAM)));
             Map<String, HandlerMapping> handlerMappingMap = context.getBeansOfType(HandlerMapping.class);
             handlerMappings.addAll(handlerMappingMap.values());
             Map<String, HandlerAdapter> handlerAdapterMap = context.getBeansOfType(HandlerAdapter.class);

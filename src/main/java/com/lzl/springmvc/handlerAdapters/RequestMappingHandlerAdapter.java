@@ -46,6 +46,7 @@ public class RequestMappingHandlerAdapter implements HandlerAdapter {
         for (int i=0; i<parameters.length;i++){
             for (Map.Entry<String, String[]> entry : parameterMap.entrySet()){
                 if (entry.getKey().equals(parameters[i].getAnnotation(RequestParam.class).value())) {
+                    //FIXME：第一个if只是为了简单实现数组类型的基本参数，后续扩展应该去掉，放在参数映射器中处理
                     if (Collection.class.isAssignableFrom(parameterTypes[i])) {
                         paramValues[i] = (Collection)Arrays.asList(entry.getValue()[0].split(","));
                     }else {
