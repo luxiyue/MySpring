@@ -38,8 +38,8 @@ public class LzlApplicationContext {
 
 
     private void refresh() {
-        //扫描  ---》 BeanDefinition --- > beanDefinitionMap
-        obtainFreshBeanFactory();
+        //简单实现 ConfigurationClassPostProcessor 的功能
+        invokeBeanFactoryPostProcessors();
         //简单实现：注册bean的后置处理器
         registerBeanPostProcessors();
         onRefresh();
@@ -62,7 +62,7 @@ public class LzlApplicationContext {
     }
 
 
-    private void obtainFreshBeanFactory() {
+    private void invokeBeanFactoryPostProcessors() {
         if (configClass.isAnnotationPresent(ComponentScan.class)) {
             ComponentScan componentScanAnnotation = (ComponentScan) configClass.getAnnotation(ComponentScan.class);
             String path = componentScanAnnotation.value();//扫描路径 （com.lzl.service）
