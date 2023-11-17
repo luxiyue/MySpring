@@ -8,7 +8,7 @@
         <servlet-name>dispatcherServlet</servlet-name>
         <servlet-class>com.lzl.springmvc.DispatcherServlet</servlet-class>
         <init-param>
-            <param-name>configClass</param-name>
+            <param-name>contextClass</param-name>
             <param-value>com.lzl.userapp.config.AppConfig</param-value> <!-- spring的子容器 -->
         </init-param>
     </servlet>

@@ -36,6 +36,11 @@ public class DispatcherServlet extends HttpServlet {
     private void doDispatch(HttpServletRequest req, HttpServletResponse resp) {
         try {
             HandlerExecutionChain mappedHandler = getHandler(req);
+            if (mappedHandler == null) {
+                //lzl: 报404错误
+                noHandlerFound(req, resp);
+                return;
+            }
             HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
             Object mv = ha.handle(req, resp, mappedHandler.getHandler());
         } catch (Exception e) {
@@ -44,7 +49,9 @@ public class DispatcherServlet extends HttpServlet {
     }
 
 
-
+    private void noHandlerFound(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.getOutputStream().write("404".getBytes());
+    }
 
 
     protected HandlerExecutionChain getHandler(HttpServletRequest request) throws Exception {
