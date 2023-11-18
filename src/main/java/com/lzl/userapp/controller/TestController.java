@@ -31,4 +31,11 @@ public class TestController {
         return set.size() + "  " + set.contains(1) + "   " + set.contains("1");
     }
 
+
+    @RequestMapping("/test4")
+    public String test04(){
+        return "lzl nb~";
+    }
+
+
 }

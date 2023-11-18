@@ -46,9 +46,11 @@ public class RequestMappingHandlerAdapter implements HandlerAdapter {
 
     public static Object[] getMethodArgumentValues(HttpServletRequest request, RequestMappingInfo handler){
         Method method = handler.getMethod();
-//        Class<?>[] parameterTypes = method.getParameterTypes();
-        Type[] genericParameterTypes = method.getGenericParameterTypes();
         Parameter[] parameters = method.getParameters();
+        if (parameters == null || parameters.length == 0) {
+            return new Object[0];
+        }
+        Type[] genericParameterTypes = method.getGenericParameterTypes();
         Object[] args = new Object[parameters.length];
         for (int i=0; i<parameters.length;i++){
             // 模拟参数解析器对参数进行解析
