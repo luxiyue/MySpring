@@ -1,8 +1,6 @@
 package com.lzl.springmvc;
 
 import com.lzl.spring.LzlApplicationContext;
-import com.lzl.userapp.config.AppConfig;
-
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

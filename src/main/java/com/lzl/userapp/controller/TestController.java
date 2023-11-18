@@ -5,7 +5,9 @@ import com.lzl.springmvc.annotations.Controller;
 import com.lzl.springmvc.annotations.RequestMapping;
 import com.lzl.springmvc.annotations.RequestParam;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author： Luzelong
@@ -22,6 +24,11 @@ public class TestController {
     @RequestMapping("/test2")
     public String test02(@RequestParam("list") List<Integer> list){
         return "TestController.test02~" + list.size() + " " + JSON.toJSONString(list);
+    }
+
+    @RequestMapping("/test3")
+    public String test03(@RequestParam("set") Set<Integer> set){
+        return set.size() + "  " + set.contains(1) + "   " + set.contains("1");
     }
 
 }
